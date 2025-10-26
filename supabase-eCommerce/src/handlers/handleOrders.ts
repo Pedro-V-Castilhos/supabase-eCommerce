@@ -78,3 +78,32 @@ export const updateOrderStatus = async (orderId:number, newStatus:string) => {
         return
     }
 }
+
+export const deleteProductFromOrder = async (orderId: number, productId:number) => {
+    const {error} = await supabase.from("order_has_products").delete().eq("orderId", orderId).eq("productId", productId)
+
+    if(error){
+        console.log(error.message)
+        return
+    }
+}
+
+export const updateQuantity = async (orderId: number, newQuantity: number) => {
+    if(newQuantity < 0){
+        return
+    }
+
+    if(newQuantity == 0){
+        const {error} = await supabase.from("order_has_products").delete().eq("id", orderId)
+        if(error){
+            console.log(error.message)
+            return
+        }
+    }else{
+        const {error} = await supabase.from("order_has_products").update({quantity: newQuantity}).eq("id", orderId)
+        if(error){
+            console.log(error.message)
+            return
+        }
+    }
+}
