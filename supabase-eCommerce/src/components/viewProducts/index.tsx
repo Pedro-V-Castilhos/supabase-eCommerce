@@ -1,55 +1,22 @@
 import { useEffect, useState } from "react"
 import "./styles.css"
-import { supabase } from "../../supabase-client"
 import type Product from "../../types/product"
 import type Order from "../../types/order"
 import ProductCard from "./card"
+import { fetchOrders } from "./handleOrders"
+import { fetchProducts } from "./handleProducts"
 
 export default function ViewProducts(){
-    const [products, setProducts] = useState<Product[]>([])
-    const [orders, setOrders] = useState<Order[]>([])
-
-    const newOrder = async () => {
-        const idUser:string | undefined = (await supabase.auth.getSession()).data.session?.user.id
-
-        const {error} = await supabase.from("orders").insert({status:"Aberto", client: idUser})
-        if(error){
-            console.log(error.message)
-            return
-        }
-    }
-
-    const fetchOrders = async() => {
-        const {error, data} = await supabase.from("orders").select("*").eq("status", "Aberto");
-
-        if(data?.length == 0){
-            newOrder();
-            fetchOrders();
-            return
-        }
-
-        if(error){
-            console.log(error.message)
-            return
-        }
-
-        setOrders(data)
-    }
-
-    const fetchProducts = async () => {
-        const {error, data} = await supabase.from("products").select("*");
-
-        if(error){
-            console.log(error.message)
-            return
-        }
-
-        setProducts(data)
-    }
+    const [products, setProducts] = useState<Product[] | undefined>([])
+    const [orders, setOrders] = useState<Order[] | undefined>()
 
     useEffect(() => {
-        fetchProducts();
-        fetchOrders();
+        const loadData = async () => {
+            setProducts(await fetchProducts())
+            setOrders(await fetchOrders())
+        }
+
+        loadData();
     }, []);
 
     console.log(orders)
@@ -58,7 +25,7 @@ export default function ViewProducts(){
         <div className="productsDisplay">
         <h2>Produtos</h2>
         <div className="viewProducts">
-            {products.map((product) => {
+            {products?.map((product) => {
                 return(
                     <ProductCard item={product} />
                 )
