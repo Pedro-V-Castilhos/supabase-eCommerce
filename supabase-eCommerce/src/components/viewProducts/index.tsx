@@ -3,6 +3,7 @@ import "./styles.css"
 import { supabase } from "../../supabase-client"
 import type Product from "./product"
 import type Order from "./order"
+import ProductCard from "./productCard"
 
 export default function ViewProducts(){
     const [products, setProducts] = useState<Product[]>([])
@@ -59,11 +60,7 @@ export default function ViewProducts(){
         <div className="viewProducts">
             {products.map((product) => {
                 return(
-                    <div className="card" key={product.id}>
-                        <h3>{product.name}</h3>
-                        <img src={product.imgUrl}></img>
-                        <p>Preço: R${product.unitPrice.toFixed(2)}</p>
-                    </div>
+                    <ProductCard item={product} />
                 )
             })}
         </div>
