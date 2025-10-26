@@ -1,4 +1,5 @@
-import type Product from "../../types/product";
+import type Product from "../../../types/product";
+import "./styles.css"
 
 export default function ProductCard(props:{item:Product}){
     return(

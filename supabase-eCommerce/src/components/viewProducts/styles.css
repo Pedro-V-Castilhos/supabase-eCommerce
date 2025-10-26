@@ -18,19 +18,3 @@ h2{
     display:flex;
     gap:1em;
 }
-
-.card{
-    gap:1em;
-    padding:2em;
-    transition: 0.5s;
-}
-
-.card:hover{
-    cursor: pointer;
-    scale: 1.1;
-}
-
-.card img{
-    padding:1em;
-    border: 1px solid gray;
-}

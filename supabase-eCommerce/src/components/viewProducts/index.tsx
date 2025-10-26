@@ -3,7 +3,7 @@ import "./styles.css"
 import { supabase } from "../../supabase-client"
 import type Product from "../../types/product"
 import type Order from "../../types/order"
-import ProductCard from "./productCard"
+import ProductCard from "./card"
 
 export default function ViewProducts(){
     const [products, setProducts] = useState<Product[]>([])
