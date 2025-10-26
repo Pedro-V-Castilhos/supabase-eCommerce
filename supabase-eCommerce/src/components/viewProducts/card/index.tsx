@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
 import type Product from "../../../types/product";
 import "./styles.css"
-import { insertProductToOrder } from "../handleOrders";
+import { insertProductToOrder } from "../../../handlers/handleOrders";
 
 export default function ProductCard(props:{item:Product}){
     return(

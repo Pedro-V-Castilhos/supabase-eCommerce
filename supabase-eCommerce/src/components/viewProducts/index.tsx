@@ -3,8 +3,8 @@ import "./styles.css"
 import type Product from "../../types/product"
 import type Order from "../../types/order"
 import ProductCard from "./card"
-import { fetchOrders } from "./handleOrders"
-import { fetchProducts } from "./handleProducts"
+import { fetchOrders } from "../../handlers/handleOrders"
+import { fetchProducts } from "../../handlers/handleProducts"
 
 export default function ViewProducts(){
     const [products, setProducts] = useState<Product[] | undefined>()

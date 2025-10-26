@@ -41,7 +41,10 @@ function App() {
           <Navbar.Brand><img src="/supabase-logo-icon.svg"/></Navbar.Brand>
           <Navbar.Collapse className="justify-content-start">
             {session
-              ?<Link to="/order">Meu carrinho</Link>
+              ? (<>
+                  <Link to="/viewProducts" className="navbarLink">Catálogo</Link> 
+                  <Link to="/order" className="navbarLink">Meu carrinho</Link>
+                </>)
               : null
             }
           </Navbar.Collapse>

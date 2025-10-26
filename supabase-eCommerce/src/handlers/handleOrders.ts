@@ -1,6 +1,6 @@
-import { supabase } from "../../supabase-client"
-import type Order from "../../types/order"
-import type OrderHasProduct from "../../types/orderHasProduct"
+import { supabase } from "../supabase-client"
+import type Order from "../types/order"
+import type OrderHasProduct from "../types/orderHasProduct"
 
 export const newOrder = async () => {
     const idUser:string | undefined = (await supabase.auth.getSession()).data.session?.user.id
