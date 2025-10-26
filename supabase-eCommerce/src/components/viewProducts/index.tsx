@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import "./styles.css"
 import { supabase } from "../../supabase-client"
-import type Product from "./product"
-import type Order from "./order"
+import type Product from "../../types/product"
+import type Order from "../../types/order"
 import ProductCard from "./productCard"
 
 export default function ViewProducts(){
