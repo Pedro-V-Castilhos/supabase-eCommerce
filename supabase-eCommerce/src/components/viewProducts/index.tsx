@@ -7,7 +7,7 @@ import { fetchOrders } from "./handleOrders"
 import { fetchProducts } from "./handleProducts"
 
 export default function ViewProducts(){
-    const [products, setProducts] = useState<Product[] | undefined>([])
+    const [products, setProducts] = useState<Product[] | undefined>()
     const [orders, setOrders] = useState<Order[] | undefined>()
 
     useEffect(() => {
