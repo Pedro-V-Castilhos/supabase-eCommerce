@@ -59,3 +59,14 @@ export const checkIfProductInOrder = async (productId:number, orderId:number) =>
 
     return data
 }
+
+export const getOrderProducts = async (orderId: number) => {
+    const {error, data} = await supabase.from("order_has_products").select("*, products (*)").eq("orderId", orderId) || [];
+
+    if(error){
+        console.log(error.message)
+        return
+    }
+
+    return data
+}

@@ -1,25 +1,19 @@
 import { useEffect, useState } from "react"
 import "./styles.css"
 import type Product from "../../types/product"
-import type Order from "../../types/order"
 import ProductCard from "./card"
-import { fetchOrders } from "../../handlers/handleOrders"
 import { fetchProducts } from "../../handlers/handleProducts"
 
 export default function ViewProducts(){
     const [products, setProducts] = useState<Product[] | undefined>()
-    const [orders, setOrders] = useState<Order[] | undefined>()
 
     useEffect(() => {
         const loadData = async () => {
             setProducts(await fetchProducts())
-            setOrders(await fetchOrders())
         }
 
         loadData();
     }, []);
-
-    console.log(orders)
 
     return(
         <div className="productsDisplay">

@@ -11,7 +11,7 @@ export const fetchProducts = async () => {
     return data;
 }
 
-export const selectProduct = async (id:number) => {
+export const getProduct = async (id:number) => {
     const {error, data} = await supabase.from("products").select("*").eq("id", id)
 
     if(error){
