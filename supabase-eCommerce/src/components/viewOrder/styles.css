@@ -30,3 +30,7 @@ th{
 .total{
     font-weight: bold;
 }
+
+button{
+    margin:1em;
+}

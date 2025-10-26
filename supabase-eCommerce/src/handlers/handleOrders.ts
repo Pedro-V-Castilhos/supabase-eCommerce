@@ -69,3 +69,12 @@ export const getOrderProducts = async (orderId: number) => {
 
     return data
 }
+
+export const updateOrderStatus = async (orderId:number, newStatus:string) => {
+    const {error} = await supabase.from("orders").update({status: newStatus}).eq("id", orderId)
+
+    if(error){
+        console.log(error.message)
+        return
+    }
+}

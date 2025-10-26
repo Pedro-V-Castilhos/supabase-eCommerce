@@ -10,11 +10,13 @@ import ViewOrder from "./components/viewOrder";
 function App() {
   // UseState da sessão atual
   const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // Atualiza a sessão para corresponder com a atual
   const fetchSession = async () => {
     const curentSession = await supabase.auth.getSession();
     setSession(curentSession.data.session)
+    setLoading(false);
   }
 
 
@@ -59,12 +61,14 @@ function App() {
         </Container>
     </Navbar>
     <div className="app">
-      <Routes>
-        <Route path="/" element={session ? <Navigate to="/viewProducts" /> : <Navigate to="/authenticate" />}/>
-        <Route path="/authenticate" element={session ? <Navigate to="/viewProducts" /> : <Auth/>}/>
-        <Route path="/viewProducts" element={session? <ViewProducts/> : <Navigate to="/authenticate"/>}/>
-        <Route path="/order" element={session? <ViewOrder/> : <Navigate to="/authenticate"/>}/> 
-      </Routes>
+    {!loading && (
+        <Routes>
+          <Route path="/" element={session ? <Navigate to="/viewProducts" /> : <Navigate to="/authenticate" />}/>
+          <Route path="/authenticate" element={session ? <Navigate to="/viewProducts" /> : <Auth/>}/>
+          <Route path="/viewProducts" element={session? <ViewProducts/> : <Navigate to="/authenticate"/>}/>
+          <Route path="/order" element={session? <ViewOrder/> : <Navigate to="/authenticate"/>}/> 
+        </Routes>
+    )}
     </div>
     </BrowserRouter>
   )
