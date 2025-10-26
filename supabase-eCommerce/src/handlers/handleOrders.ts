@@ -33,8 +33,7 @@ export const insertProductToOrder = async (id:number) => {
     const currentOrder:Order[] = await fetchOrders() || []
     const orderHasProuct:OrderHasProduct[] = await checkIfProductInOrder(id, currentOrder[0].id) || []
 
-    console.log(...orderHasProuct)
-    if(orderHasProuct){
+    if(orderHasProuct.length != 0){
         const {error} = await supabase.from("order_has_products").update({quantity: orderHasProuct[0].quantity + 1}).eq("id", orderHasProuct[0].id)
         if(error){
             console.log(error.message)

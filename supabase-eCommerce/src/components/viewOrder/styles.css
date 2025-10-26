@@ -5,3 +5,28 @@
     width:100%;
     height:100%;
 }
+
+.viewOrder{
+    margin:2em;
+    text-align: center;
+}
+
+table{
+    padding:1em;
+    display:inline-block;
+    text-align: center;
+}
+
+th, td{
+    width: 200px;
+    height: 50px;
+    border: 1px solid black;
+}
+
+th{
+    background-color: rgb(181, 181, 181);
+}
+
+.total{
+    font-weight: bold;
+}

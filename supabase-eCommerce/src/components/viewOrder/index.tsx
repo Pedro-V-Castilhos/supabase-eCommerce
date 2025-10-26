@@ -18,6 +18,8 @@ export default function ViewOrder(){
         loadOrders();
     }, [])
 
+    const totalValue:number[] = [0] 
+
     return(
         <div className="orderDisplay">
         <h2>Meu carrinho</h2>
@@ -33,15 +35,18 @@ export default function ViewOrder(){
                 </thead>
                 <tbody>
                     {order?.map((prod) => {
+                        const total:number = prod.quantity * prod.products.unitPrice
+                        totalValue[0] += total;
                         return(
-                            <tr>
+                            <tr key={prod.id}>
                                 <td>{prod.products.name}</td>
                                 <td>{prod.quantity}</td>
-                                <td>{prod.products.unitPrice}</td>
-                                <td>{prod.quantity * prod.products.unitPrice}</td>
+                                <td>R${prod.products.unitPrice.toFixed(2)}</td>
+                                <td>R${total.toFixed(2)}</td>
                             </tr>
                         )
                     })}
+                    <tr><td className="total" colSpan={4}>Total: R${totalValue[0].toFixed(2)}</td></tr>
                 </tbody>
             </table>
         </div>
