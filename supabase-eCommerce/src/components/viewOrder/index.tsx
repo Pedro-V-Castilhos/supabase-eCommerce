@@ -4,13 +4,16 @@ import type Order from "../../types/order";
 import { deleteProductFromOrder, fetchOrders, getOrderProducts, updateOrderStatus, updateQuantity } from "../../handlers/handleOrders";
 import type Product from "../../types/product";
 import { Button } from "react-bootstrap";
-import { supabase } from "../../supabase-client";
 import { useNavigate } from "react-router-dom";
+import { exportCSV } from "./generateCSV";
 
 export default function ViewOrder(){
+    // UseState do pedido aberto do usuário
     const [order, setOrder] = useState<{id: number, productId: number, orderId: number, quantity: number, products: Product}[]>()
+    // Navigate para redirecionamento de página
     const redirect = useNavigate();
     
+    // Carrega a ordem aberta do usuário
     useEffect(()=>{
         const loadOrders = async () => {
             const orders:Order[] | undefined = await fetchOrders();
@@ -22,41 +25,7 @@ export default function ViewOrder(){
         loadOrders();
     }, [])
 
-    const exportCSV = async () => {
-        const sessionResponse = await supabase.auth.getSession()
-        const token = sessionResponse.data.session?.access_token
-
-        const orderId = (order??[])[0].orderId
-        if(!orderId){
-            console.log("Erro: nenhum pedido carregado!")
-            return
-        }
-
-        console.log(token)
-
-        const data = await fetch(`https://vexkajdtdhffxefkyydx.supabase.co/functions/v1/exportOrderCSV/${orderId}`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if(!data.ok){
-            console.log("Erro ao gerar o arquivo csv!")
-            return
-        }
-
-        const blob = await data.blob(); 
-        const url = URL.createObjectURL(blob); 
-
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `pedido.csv`; 
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-    }
-
+    // Prepara a variável para calcular o valor total da compra
     const totalValue:number[] = [0] 
 
     return(
@@ -87,8 +56,10 @@ export default function ViewOrder(){
                                             await updateQuantity(prod.id, prod.quantity - 1)
                                             
                                             if((prod.quantity - 1) == 0){
+                                                // Atualiza a página para excluir o item
                                                 redirect(0)
                                             }else{
+                                                // Atualiza o useState para renderizar a página novamente
                                                 setOrder((prev) =>
                                                 prev?.map((p) =>
                                                     p.id === prod.id ? { ...p, quantity: prod.quantity - 1 } : p
@@ -104,7 +75,8 @@ export default function ViewOrder(){
                                         variant=""
                                         onClick={async () => {
                                             await updateQuantity(prod.id, prod.quantity + 1)
-
+                                            
+                                            // Atualiza o useState para renderizar a página novamente
                                             setOrder((prev) =>
                                             prev?.map((p) =>
                                                 p.id === prod.id ? { ...p, quantity: prod.quantity + 1 } : p
@@ -122,6 +94,7 @@ export default function ViewOrder(){
                                         variant="danger" 
                                         onClick={async () => {
                                             await deleteProductFromOrder(prod.orderId, prod.productId)
+                                            // Atualiza a página para exluir item da visualização
                                             redirect(0);
                                         }}
                                     >
@@ -139,6 +112,7 @@ export default function ViewOrder(){
             <Button 
                 variant="primary"
                 onClick={async () => {
+                    // Confirma a compra
                     const orderId = (order ?? [])[0].orderId;
 
                     if(!order){
@@ -146,7 +120,7 @@ export default function ViewOrder(){
                     }
 
                     await updateOrderStatus(orderId, "Confirmado")
-                    await exportCSV()
+                    await exportCSV(orderId)
                     redirect("/")
                 }}
             >
@@ -155,6 +129,7 @@ export default function ViewOrder(){
             <Button 
                 variant="danger"
                 onClick={async () => {
+                    // Cancela a compra
                     const orderId = (order ?? [])[0].orderId;
 
                     if(!order){

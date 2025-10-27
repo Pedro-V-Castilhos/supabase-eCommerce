@@ -2,6 +2,7 @@ import { supabase } from "../supabase-client"
 import type Order from "../types/order"
 import type OrderHasProduct from "../types/orderHasProduct"
 
+// INSERT ORDER
 export const newOrder = async () => {
     const idUser:string | undefined = (await supabase.auth.getSession()).data.session?.user.id
     const {error} = await supabase.from("orders").insert({status:"Aberto", client: idUser})
@@ -12,6 +13,7 @@ export const newOrder = async () => {
     }
 }
 
+// SELECT * ORDER
 export const fetchOrders = async() => {
     const {error, data} = await supabase.from("orders").select("*").eq("status", "Aberto");
 
@@ -29,6 +31,7 @@ export const fetchOrders = async() => {
     return data;
 }
 
+// INSERT OR UPDATE ORDER HAS PRODUCTS
 export const insertProductToOrder = async (id:number) => {
     const currentOrder:Order[] = await fetchOrders() || []
     const orderHasProuct:OrderHasProduct[] = await checkIfProductInOrder(id, currentOrder[0].id) || []
@@ -48,6 +51,7 @@ export const insertProductToOrder = async (id:number) => {
     }
 }
 
+// SELECT PRODUCT FROM ORDER HAS PRODUCTS
 export const checkIfProductInOrder = async (productId:number, orderId:number) => {
     const {error, data} = await supabase.from("order_has_products").select("*").eq("productId", productId).eq("orderId", orderId)
     
@@ -59,6 +63,7 @@ export const checkIfProductInOrder = async (productId:number, orderId:number) =>
     return data
 }
 
+// SELECT * FROM ORDER HAS PRODUCTS
 export const getOrderProducts = async (orderId: number) => {
     const {error, data} = await supabase.from("order_has_products").select("*, products (*)").eq("orderId", orderId) || [];
 
@@ -70,6 +75,7 @@ export const getOrderProducts = async (orderId: number) => {
     return data
 }
 
+// UPDATE ORDER
 export const updateOrderStatus = async (orderId:number, newStatus:string) => {
     const {error} = await supabase.from("orders").update({status: newStatus}).eq("id", orderId)
 
@@ -79,6 +85,7 @@ export const updateOrderStatus = async (orderId:number, newStatus:string) => {
     }
 }
 
+// DELETE PRODUCT FROM ORDER
 export const deleteProductFromOrder = async (orderId: number, productId:number) => {
     const {error} = await supabase.from("order_has_products").delete().eq("orderId", orderId).eq("productId", productId)
 
@@ -88,6 +95,7 @@ export const deleteProductFromOrder = async (orderId: number, productId:number) 
     }
 }
 
+// UPDATE ORDER HAS PRODUCT
 export const updateQuantity = async (orderId: number, newQuantity: number) => {
     if(newQuantity < 0){
         return

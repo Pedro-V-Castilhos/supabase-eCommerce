@@ -19,7 +19,7 @@ function App() {
     setLoading(false);
   }
 
-
+// Carrega a sessão ao renderizar a página
   useEffect(() => {
     fetchSession();
 
@@ -32,10 +32,12 @@ function App() {
     }
   }, [])
 
+  // Função de logout
   const logout = async () => {
     await supabase.auth.signOut();
   }
 
+  // Render da página
   return (
     <BrowserRouter>
     <Navbar>
@@ -47,7 +49,7 @@ function App() {
                   <Link to="/viewProducts" className="navbarLink">Catálogo</Link> 
                   <Link to="/order" className="navbarLink">Meu carrinho</Link>
                 </>)
-              : null
+              : <></>
             }
           </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">
@@ -60,16 +62,18 @@ function App() {
           </Navbar.Collapse>
         </Container>
     </Navbar>
+
     <div className="app">
-    {!loading && (
-        <Routes>
-          <Route path="/" element={session ? <Navigate to="/viewProducts" /> : <Navigate to="/authenticate" />}/>
-          <Route path="/authenticate" element={session ? <Navigate to="/viewProducts" /> : <Auth/>}/>
-          <Route path="/viewProducts" element={session? <ViewProducts/> : <Navigate to="/authenticate"/>}/>
-          <Route path="/order" element={session? <ViewOrder/> : <Navigate to="/authenticate"/>}/> 
-        </Routes>
-    )}
+      {!loading && (
+          <Routes>
+            <Route path="/" element={session ? <Navigate to="/viewProducts" /> : <Navigate to="/authenticate" />}/>
+            <Route path="/authenticate" element={session ? <Navigate to="/viewProducts" /> : <Auth/>}/>
+            <Route path="/viewProducts" element={session? <ViewProducts/> : <Navigate to="/authenticate"/>}/>
+            <Route path="/order" element={session? <ViewOrder/> : <Navigate to="/authenticate"/>}/> 
+          </Routes>
+      )}
     </div>
+
     </BrowserRouter>
   )
 }
